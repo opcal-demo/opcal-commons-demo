@@ -27,6 +27,7 @@
 
     <packaging>pom</packaging>
     <modules>
+        <module>datasource-demo</module>
         <module>eclipselink-jpa-demo</module>
         <module>soft-delete-demos</module>
         <module>mybatis-demos</module>
