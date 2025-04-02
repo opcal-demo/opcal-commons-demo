@@ -24,8 +24,12 @@ spring:
       javax.persistence.sharedCache.mode: NONE
   docker:
     compose:
-      skip:
-        in-tests: false
-      file: @basedir@/../docker-compose.yml
+      start:
+        arguments:
+          - --pull=${PULL_POLICY:missing}
       stop:
         command: down
+      skip:
+        in-tests: false
+      file:
+        - ../docker-compose.yml

@@ -20,8 +20,12 @@ spring:
     show-sql: true
   docker:
     compose:
-      skip:
-        in-tests: false
-      file: @basedir@/../../docker-compose.yml
+      start:
+        arguments:
+          - --pull=${PULL_POLICY:missing}
       stop:
         command: down
+      skip:
+        in-tests: false
+      file:
+        - ../../docker-compose.yml
