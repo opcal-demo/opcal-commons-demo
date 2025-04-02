@@ -1,0 +1,39 @@
+server:
+  shutdown: graceful
+
+spring:
+  kafka:
+    bootstrap-servers:
+    - 127.0.0.1:19092
+    - 127.0.0.1:29092
+    - 127.0.0.1:39092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      transaction-id-prefix: tx.
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      properties:
+        isolation.level: read_committed
+        spring.json.trusted.packages: "*"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: test
+    password: test
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 5
+      idle-timeout: 60000
+      connection-timeout: 5000
+      connection-test-query: SELECT 1
+  docker:
+    compose:
+      stop:
+        command: down
+      skip:
+        in-tests: false
+  jpa:
+    show-sql: true
+

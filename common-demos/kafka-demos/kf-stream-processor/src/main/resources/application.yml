@@ -1,0 +1,53 @@
+server:
+  shutdown: graceful
+
+spring:
+  application:
+    name: kf-stream-processor
+  kafka:
+    bootstrap-servers: 127.0.0.1:19092,127.0.0.1:29092,127.0.0.1:39092
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      properties:
+        spring.json.trusted.packages: "*"
+    streams:
+      properties:
+        spring.json.add.type.headers: false
+        spring.json.trusted.packages: "*"
+  cloud:
+    function:
+      definition: userProcessor;ageCount
+    stream:
+      bindings:
+        new-user-out-0:
+          destination: kf_new_user
+          binder: kafka
+        userProcessor-in-0:
+          destination: kf_new_user
+        userProcessor-out-0:
+          destination: kf_new_user_age_count
+        ageCount-in-0:
+          destination: kf_new_user_age_count
+      kafka:
+        streams:
+          binder:
+            auto-add-partitions: true
+            min-partition-count: 3
+            functions:
+              userProcessor:
+                application-id: userProcessor
+              ageCount:
+                application-id: ageCount
+  docker:
+    compose:
+      skip:
+        in-tests: false
+      stop:
+        command: down
+                
+            
+            
+              
+          

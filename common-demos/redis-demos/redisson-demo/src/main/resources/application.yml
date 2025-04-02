@@ -1,0 +1,25 @@
+server:
+  servlet:
+    session:
+      timeout: 5m
+  shutdown: graceful
+
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  redis:
+    redisson:
+      file: classpath:redisson.yaml
+  security:
+    user:
+      name: user
+      password: password
+  docker:
+    compose:
+      file: @basedir@/../docker-compose.yml
+      stop:
+        command: down
+      skip:
+        in-tests: false

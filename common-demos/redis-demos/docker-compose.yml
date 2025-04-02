@@ -1,0 +1,185 @@
+services:
+  redis-master:
+    image: redis:7.2
+    container_name: redis-master
+    labels:
+      org.springframework.boot.ignore: true
+    ports:
+      - 6379:6379
+    environment:
+      REDIS_PORT: 6379
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./redis-conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/redis/
+        cp /tmp/conf/redis.conf /usr/local/etc/redis/
+        sed -i "$$ a replica-announce-ip $${HOST_IP}" /usr/local/etc/redis/redis.conf
+        redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: "redis-cli -p $${REDIS_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
+  redis-replicas-1:
+    image: redis:7.2
+    container_name: replicas-1
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - redis-master
+    ports:
+      - 6380:6380
+    environment:
+      REDIS_PORT: 6380
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./redis-conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/redis/
+        cp /tmp/conf/redis.conf /usr/local/etc/redis/
+        sed -ir "s/^[#]*\s*port .*/port $${REDIS_PORT}/" /usr/local/etc/redis/redis.conf
+        sed -i "$$ a replicaof $${HOST_IP} 6379" /usr/local/etc/redis/redis.conf
+        sed -i "$$ a replica-announce-ip $${HOST_IP}" /usr/local/etc/redis/redis.conf
+        redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: "redis-cli -p $${REDIS_PORT} -a demo --raw incr ping"
+      start_period: 10s # wait for replicas sync
+      interval: 2s
+      retries: 20
+  redis-replicas-2:
+    image: redis:7.2
+    container_name: replicas-2
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - redis-master
+    ports:
+      - 6381:6381
+    environment:
+      REDIS_PORT: 6381
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./redis-conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/redis/
+        cp /tmp/conf/redis.conf /usr/local/etc/redis/
+        sed -ir "s/^[#]*\s*port .*/port $${REDIS_PORT}/" /usr/local/etc/redis/redis.conf
+        sed -i "$$ a replicaof $${HOST_IP} 6379" /usr/local/etc/redis/redis.conf
+        sed -i "$$ a replica-announce-ip $${HOST_IP}" /usr/local/etc/redis/redis.conf
+        redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: "redis-cli -p $${REDIS_PORT} -a demo --raw incr ping"
+      start_period: 10s # wait for replicas sync
+      interval: 2s
+      retries: 20
+  sentinel-1:
+    image: redis:7.2
+    container_name: sentinel-1
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - redis-master
+      - redis-replicas-1
+      - redis-replicas-2
+    ports:
+      - 26379:26379
+    environment:
+      REDIS_PORT: 26379
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./redis-conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/redis/
+        cp /tmp/conf/sentinel.conf /usr/local/etc/redis/
+        sed -ir "s/^[#]*\s*port .*/port $${REDIS_PORT}/" /usr/local/etc/redis/sentinel.conf
+        sed -i "$$ a sentinel monitor test $${HOST_IP} 6379 2" /usr/local/etc/redis/sentinel.conf
+        sed -i "$$ a sentinel announce-ip $${HOST_IP}" /usr/local/etc/redis/sentinel.conf
+        redis-sentinel /usr/local/etc/redis/sentinel.conf
+    healthcheck:
+      test: "redis-cli -p $${REDIS_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
+  sentinel-2:
+    image: redis:7.2
+    container_name: sentinel-2
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - redis-master
+      - redis-replicas-1
+      - redis-replicas-2
+    ports:
+      - 26380:26380
+    environment:
+      REDIS_PORT: 26380
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./redis-conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/redis/
+        cp /tmp/conf/sentinel.conf /usr/local/etc/redis/
+        sed -ir "s/^[#]*\s*port .*/port $${REDIS_PORT}/" /usr/local/etc/redis/sentinel.conf
+        sed -i "$$ a sentinel monitor test $${HOST_IP} 6379 2" /usr/local/etc/redis/sentinel.conf
+        sed -i "$$ a sentinel announce-ip $${HOST_IP}" /usr/local/etc/redis/sentinel.conf
+        redis-sentinel /usr/local/etc/redis/sentinel.conf
+    healthcheck:
+      test: "redis-cli -p $${REDIS_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
+  sentinel-3:
+    image: redis:7.2
+    container_name: sentinel-3
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - redis-master
+      - redis-replicas-1
+      - redis-replicas-2
+    ports:
+      - 26381:26381
+    environment:
+      REDIS_PORT: 26381
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./redis-conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/redis/
+        cp /tmp/conf/sentinel.conf /usr/local/etc/redis/
+        sed -ir "s/^[#]*\s*port .*/port $${REDIS_PORT}/" /usr/local/etc/redis/sentinel.conf
+        sed -i "$$ a sentinel monitor test $${HOST_IP} 6379 2" /usr/local/etc/redis/sentinel.conf
+        sed -i "$$ a sentinel announce-ip $${HOST_IP}" /usr/local/etc/redis/sentinel.conf
+        redis-sentinel /usr/local/etc/redis/sentinel.conf
+    healthcheck:
+      test: "redis-cli -p $${REDIS_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20

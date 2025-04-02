@@ -1,0 +1,11 @@
+subscription fetchAll {
+  fetchAll {
+    id
+    createdDate
+    modifiedDate
+    firstName
+    lastName
+    gender
+    age
+  }
+}

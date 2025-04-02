@@ -1,0 +1,15 @@
+
+server:
+  shutdown: graceful
+  
+  
+spring:
+  jpa:
+    show-sql: true
+  docker:
+    compose:
+      skip:
+        in-tests: false
+      file: @basedir@/../docker-compose.yml
+      stop:
+        command: down

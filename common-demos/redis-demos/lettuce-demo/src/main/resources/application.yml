@@ -1,0 +1,35 @@
+server:
+  servlet:
+    session:
+      timeout: 5m 
+  shutdown: graceful
+
+
+spring:
+  data:
+    redis:
+      database: 10
+      password: demo
+      lettuce:
+        pool:
+          max-active: 50
+          max-idle: 20
+          min-idle: 1
+      sentinel:
+        master: test
+        password: demo
+        nodes:
+        - "${HOST_IP}:26379"
+        - "${HOST_IP}:26381"
+        - "${HOST_IP}:26381"
+  security:
+    user:
+      name: user
+      password: password
+  docker:
+    compose:
+      file: @basedir@/../docker-compose.yml
+      stop:
+        command: down
+      skip:
+        in-tests: false

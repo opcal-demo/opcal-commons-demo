@@ -1,0 +1,84 @@
+server:
+  shutdown: graceful
+
+spring:
+  application:
+    name: function-multi-binder-demo
+  kafka:
+    bootstrap-servers: 127.0.0.1:19092,127.0.0.1:29092,127.0.0.1:39092
+    producer:
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      properties:
+        spring.json.trusted.packages: "*"
+    streams:
+      properties:
+        spring.json.add.type.headers: false
+        spring.json.trusted.packages: "*"
+  rabbitmq:
+    addresses: 127.0.0.1:5672
+    username: demo
+    password: demo
+    virtual-host: /
+  cloud:
+    function:
+      definition: tranfer;ageCount;countConsume
+    stream:
+      bindings:
+        new-user-out-0:
+          destination: mt_rb_new_user
+          group: source
+          binder: rabbit
+        tranfer-in-0:
+          destination: mt_rb_new_user
+          group: tranfer
+          binder: rabbit
+        tranfer-out-0:
+          destination: mt_kf_user
+          binder: kafka
+        ageCount-in-0:
+          destination: mt_kf_user
+          binder: kf-kstream
+        ageCount-out-0:
+          destination: mt_kf_user_age_count
+          binder: kf-kstream
+        countConsume-in-0:
+          destination: mt_kf_user_age_count
+          binder: kf-ktable
+      binders:
+        rabbit:
+          type: rabbit
+        kafka:
+          type: kafka
+          environment:
+             spring.cloud.stream.kafka.streams.binder.brokers: ${spring.kafka.bootstrap-servers}
+        kf-kstream:
+          type: kstream
+          environment:
+             spring.cloud.stream.kafka.streams.binder.brokers: ${spring.kafka.bootstrap-servers}
+        kf-ktable:
+          type: ktable
+          environment:
+             spring.cloud.stream.kafka.streams.binder.brokers: ${spring.kafka.bootstrap-servers}
+      kafka:
+        streams:
+          binder:
+            auto-add-partitions: true
+            min-partition-count: 3
+            functions:
+              tranfer:
+                application-id: tranfer
+              ageCount:
+                application-id: ageCount
+              countConsume:
+                application-id: countConsume
+  docker:
+    compose:
+      skip:
+        in-tests: false
+      stop:
+        command: down
+                 
+              
+              

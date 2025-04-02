@@ -1,0 +1,11 @@
+query fetchUsers($pageNum: Int!, $pageSize: Int!) {
+    fetchUsers(pageNum: $pageNum, pageSize: $pageSize) {
+      id
+      createdDate
+      modifiedDate
+      firstName
+      lastName
+      gender
+      age
+    }
+}

@@ -1,0 +1,11 @@
+subscription fetchUser($id: ID!) {
+    fetchUser(id: $id) {
+      id
+      createdDate
+      modifiedDate
+      firstName
+      lastName
+      gender
+      age
+    }
+}

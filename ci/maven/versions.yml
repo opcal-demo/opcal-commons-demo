@@ -1,0 +1,35 @@
+dependencies: #{#WORKSPACE}/ci/maven/dependencies.properties
+update-reports:
+  - #{#WORKSPACE}/target/site/property-updates-aggregate-report.html
+  - #{#WORKSPACE}/target/reports/property-updates-aggregate-report.html
+parent-reports:
+  - #{#WORKSPACE}/target/site/parent-updates-report.html
+  - #{#WORKSPACE}/target/reports/parent-updates-report.html
+version-registers:
+  - property-name: opcal-cloud-starter-parent.version
+    update-policy: INCREMENTAL
+    group-id: xyz.opcal.cloud
+    artifact-id: opcal-cloud-starter-parent
+  - property-name: redisson.version
+    update-policy: LATEST
+  - property-name: shardingsphere.version
+    update-policy: LATEST
+    enable: false
+  - property-name: org.mapstruct.version
+    update-policy: LATEST
+  - property-name: lombok-mapstruct-binding.version
+    update-policy: LATEST
+  - property-name: eclipselink.version
+    update-policy: INCREMENTAL
+  - property-name: mybatis-spring-boot.version
+    update-policy: INCREMENTAL
+  - property-name: mybatis-dynamic-sql.version
+    update-policy: LATEST
+  - property-name: mybatis-plus.version
+    update-policy: LATEST
+  - property-name: druid.version
+    update-policy: LATEST
+  - property-name: randomuser-api.version
+    update-policy: LATEST
+  
+  

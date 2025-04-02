@@ -1,0 +1,11 @@
+query userById($id: ID!) {
+    userById(id: $id) {
+      id
+      createdDate
+      modifiedDate
+      firstName
+      lastName
+      gender
+      age
+    }
+}

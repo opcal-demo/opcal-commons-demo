@@ -1,0 +1,29 @@
+server:
+  shutdown: graceful
+
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/test
+    username: test
+    password: test
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 5
+      idle-timeout: 60000
+      connection-timeout: 5000
+      connection-test-query: SELECT 1 
+  jpa:
+    show-sql: true
+  flyway:
+    enabled: true
+    baseline-version: 1.0
+    baseline-on-migrate: true
+    validate-on-migrate: true
+  docker:
+    compose:
+      stop:
+        command: down
+      skip:
+        in-tests: false

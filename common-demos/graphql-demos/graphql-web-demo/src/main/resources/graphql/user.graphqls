@@ -1,0 +1,21 @@
+type Query {
+  userById(id: ID): User
+  fetchUsers(pageNum: Int, pageSize: Int): Page
+}
+
+type User {
+  id: ID
+  createdDate(dateFormat : String = "yyyy-MM-dd HH:mm:ss") : String
+  modifiedDate(dateFormat : String = "yyyy-MM-dd HH:mm:ss") : String
+  firstName: String
+  lastName: String
+  gender: String
+  age: Int
+}
+
+type Page {
+  content: [User]
+  total: String
+  pageNum: Int
+  pageSize: Int
+}
