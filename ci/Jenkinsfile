@@ -34,7 +34,7 @@ pipeline {
                         arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: 'settings.xml', includes: '**/*', path: '/root/.m2'),
                         arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: '', includes: '**/*', path: '/var/cache/docker')
                 ],
-                        defaultBranch: 'main',
+                        defaultBranch: '3.3.x',
                         maxCacheSize: 0) {
                     container("dind-jdk-21") {
                         script {
@@ -49,7 +49,6 @@ pipeline {
                             sh "export HOST_IP=${env.HOST_IP};"
                             sh "export PULL_POLICY=${params.PULL_POLICY};"
                             sh 'printenv HOST_IP'
-                            sh 'printenv PULL_POLICY'
                             sh "./mvnw -U clean test"
                             sh 'docker container prune -f'
                             sh 'docker image prune -f'
