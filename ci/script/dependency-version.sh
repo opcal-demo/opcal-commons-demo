@@ -5,24 +5,10 @@
 
 set -e
 
-shopt -s expand_aliases
-
-OSTYPE=$(uname)
-
-if [[ "${OSTYPE}" == "Darwin" ]]; then
-  if readlink -f "${BASH_SOURCE:-$0}" > /dev/null 2>&1; then
-    echo "ok"
-  else 
-    if greadlink --version > /dev/null 2>&1; then
-      alias readlink=greadlink
-    fi
-  fi
-fi
-
-SCRIPT=`readlink -f "${BASH_SOURCE:-$0}"`
-SCRIPT_DIR_PATH=`dirname ${SCRIPT}`
-CI_DIR_PATH=`dirname ${SCRIPT_DIR_PATH}`
-ROOT_PATH=`dirname ${CI_DIR_PATH}`
+SCRIPT=$(readlink -f "${BASH_SOURCE:-$0}")
+SCRIPT_DIR_PATH=$(dirname ${SCRIPT})
+CI_DIR_PATH=$(dirname ${SCRIPT_DIR_PATH})
+ROOT_PATH=$(dirname ${CI_DIR_PATH})
 
 DEFAULT_FILE=${ROOT_PATH}/ci/maven/dependencies.properties
 
@@ -35,5 +21,7 @@ do
   key=${KEYS[${i}]}
   value=$(props value ${PROPERTIES_FILE} ${key})
   echo "key: ${key} - value: ${value}"
-  ${ROOT_PATH}/mvnw versions:set-property -Dproperty=${key} -DnewVersion=${value} >> /dev/null 2>&1
+  "${ROOT_PATH}"/mvnw versions:set-property -Dproperty=${key} -DnewVersion=${value} >> /dev/null 2>&1
 done
+
+"${ROOT_PATH}"/mvnw versions:commit
