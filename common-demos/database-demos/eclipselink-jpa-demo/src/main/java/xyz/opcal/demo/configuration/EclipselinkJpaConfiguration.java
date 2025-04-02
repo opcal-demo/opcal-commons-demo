@@ -42,8 +42,7 @@ public class EclipselinkJpaConfiguration extends JpaBaseConfiguration {
 	}
 
 	@Override
-	protected Map<String, Object> getVendorProperties() {
+	protected Map<String, Object> getVendorProperties(DataSource dataSource) {
 		return new HashMap<>(this.getProperties().getProperties());
 	}
-
 }

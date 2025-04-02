@@ -1,7 +1,7 @@
 package xyz.opcal.demo.entity;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "sd_user")
 @SQLDelete(sql = "UPDATE sd_user SET is_deleted=1 WHERE id=?")
-@Where(clause = "is_deleted=0")
+@SQLRestriction("is_deleted=0")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
