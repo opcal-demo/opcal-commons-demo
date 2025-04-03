@@ -2,12 +2,16 @@ pipeline {
     agent {
         kubernetes {
             cloud 'kubernetes'
-            inheritFrom 'dind-jdk-21-build'
+            inheritFrom 'dind-jdk-21-build-nfs-cache'
         }
     }
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
     parameters {
-        choice choices: ['missing', 'weekly', 'always'], name: 'PULL_POLICY'
+        choice choices: ['missing', 'always'], name: 'PULL_POLICY'
     }
 
     stages {
@@ -31,7 +35,6 @@ pipeline {
         stage('Test') {
             steps {
                 cache(caches: [
-                        arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: 'settings.xml', includes: '**/*', path: '/root/.m2'),
                         arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: '', includes: '**/*', path: '/var/cache/docker')
                 ],
                         defaultBranch: 'main',
@@ -48,7 +51,6 @@ pipeline {
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim();
                             sh "export HOST_IP=${env.HOST_IP};"
                             sh "export PULL_POLICY=${params.PULL_POLICY};"
-                            sh 'printenv HOST_IP'
                             sh "./mvnw -U clean test"
                             sh 'docker container prune -f'
                             sh 'docker image prune -f'
