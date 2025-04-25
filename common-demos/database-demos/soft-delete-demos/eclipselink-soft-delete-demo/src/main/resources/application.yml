@@ -24,9 +24,6 @@ spring:
       javax.persistence.sharedCache.mode: NONE
   docker:
     compose:
-      start:
-        arguments:
-          - --pull=${PULL_POLICY:missing}
       stop:
         command: down
       skip:

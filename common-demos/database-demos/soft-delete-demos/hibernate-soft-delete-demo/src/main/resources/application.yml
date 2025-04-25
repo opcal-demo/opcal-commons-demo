@@ -20,9 +20,6 @@ spring:
     show-sql: true
   docker:
     compose:
-      start:
-        arguments:
-          - --pull=${PULL_POLICY:missing}
       stop:
         command: down
       skip:

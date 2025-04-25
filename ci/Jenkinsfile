@@ -49,6 +49,9 @@ pipeline {
                             '''
                             sh 'start-docker.sh'
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim();
+                            if (params.PULL_POLICY == "always") {
+                                sh './ci/script/latest_image.sh'
+                            }
                             sh "export HOST_IP=${env.HOST_IP};"
                             sh "export PULL_POLICY=${params.PULL_POLICY};"
                             sh "./mvnw -U clean test"

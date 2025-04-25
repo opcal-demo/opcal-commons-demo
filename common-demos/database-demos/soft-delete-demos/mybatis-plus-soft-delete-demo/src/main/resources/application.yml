@@ -22,9 +22,6 @@ spring:
         in-tests: false
       file:
         - ../../docker-compose.yml
-      start:
-        arguments:
-          - --pull=${PULL_POLICY:missing}
       stop:
         command: down
       
