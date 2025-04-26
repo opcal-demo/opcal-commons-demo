@@ -54,7 +54,9 @@ pipeline {
                             }
                             sh "export HOST_IP=${env.HOST_IP};"
                             sh "export PULL_POLICY=${params.PULL_POLICY};"
-                            sh "./mvnw -U clean test"
+                            withCredentials([string(credentialsId: 'randomuser-api-url', variable: 'RANDOMUSER_API_URL')]) {
+                                sh './mvnw -U clean test '
+                            }
                             sh 'docker container prune -f'
                             sh 'docker image prune -f'
                             sh 'docker volume prune -f'
