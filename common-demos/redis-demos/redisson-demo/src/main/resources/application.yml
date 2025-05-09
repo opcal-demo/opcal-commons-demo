@@ -19,7 +19,7 @@ spring:
   docker:
     compose:
       file:
-        - ../docker-compose.yml
+        - ../redis/docker-compose.yml
       stop:
         command: down
       skip:

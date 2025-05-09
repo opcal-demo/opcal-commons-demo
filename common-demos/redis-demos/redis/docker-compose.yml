@@ -166,7 +166,7 @@ services:
       REDIS_PORT: 26381
       HOST_IP: "${HOST_IP}"
     volumes:
-      - ./redis-conf:/tmp/conf
+      - ./conf:/tmp/conf
     sysctls:
       - net.core.somaxconn=65535
     command:
