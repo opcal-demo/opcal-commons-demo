@@ -10,7 +10,7 @@ services:
       REDIS_PORT: 6379
       HOST_IP: "${HOST_IP}"
     volumes:
-      - ./redis-conf:/tmp/conf
+      - ./conf:/tmp/conf
     sysctls:
       - net.core.somaxconn=65535
     command:
@@ -38,7 +38,7 @@ services:
       REDIS_PORT: 6380
       HOST_IP: "${HOST_IP}"
     volumes:
-      - ./redis-conf:/tmp/conf
+      - ./conf:/tmp/conf
     sysctls:
       - net.core.somaxconn=65535
     command:
@@ -69,7 +69,7 @@ services:
       REDIS_PORT: 6381
       HOST_IP: "${HOST_IP}"
     volumes:
-      - ./redis-conf:/tmp/conf
+      - ./conf:/tmp/conf
     sysctls:
       - net.core.somaxconn=65535
     command:
@@ -102,7 +102,7 @@ services:
       REDIS_PORT: 26379
       HOST_IP: "${HOST_IP}"
     volumes:
-      - ./redis-conf:/tmp/conf
+      - ./conf:/tmp/conf
     sysctls:
       - net.core.somaxconn=65535
     command:
@@ -134,7 +134,7 @@ services:
       REDIS_PORT: 26380
       HOST_IP: "${HOST_IP}"
     volumes:
-      - ./redis-conf:/tmp/conf
+      - ./conf:/tmp/conf
     sysctls:
       - net.core.somaxconn=65535
     command:
