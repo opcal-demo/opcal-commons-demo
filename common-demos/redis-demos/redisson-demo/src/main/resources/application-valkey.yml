@@ -1,0 +1,10 @@
+
+spring:
+  docker:
+    compose:
+      file:
+        - ../valkey/docker-compose.yml
+      stop:
+        command: down
+      skip:
+        in-tests: false

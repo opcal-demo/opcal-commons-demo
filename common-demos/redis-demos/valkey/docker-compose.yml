@@ -1,0 +1,185 @@
+services:
+  valkey-master:
+    image: valkey/valkey:8.1
+    container_name: valkey-master
+    labels:
+      org.springframework.boot.ignore: true
+    ports:
+      - 6379:6379
+    environment:
+      VALKEY_PORT: 6379
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/valkey/
+        cp /tmp/conf/valkey.conf /usr/local/etc/valkey/
+        sed -i "$$ a replica-announce-ip $${HOST_IP}" /usr/local/etc/valkey/valkey.conf
+        valkey-server /usr/local/etc/valkey/valkey.conf
+    healthcheck:
+      test: "valkey-cli -p $${VALKEY_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
+  valkey-replicas-1:
+    image: valkey/valkey:8.1
+    container_name: replicas-1
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - valkey-master
+    ports:
+      - 6380:6380
+    environment:
+      VALKEY_PORT: 6380
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/valkey/
+        cp /tmp/conf/valkey.conf /usr/local/etc/valkey/
+        sed -ir "s/^[#]*\s*port .*/port $${VALKEY_PORT}/" /usr/local/etc/valkey/valkey.conf
+        sed -i "$$ a replicaof $${HOST_IP} 6379" /usr/local/etc/valkey/valkey.conf
+        sed -i "$$ a replica-announce-ip $${HOST_IP}" /usr/local/etc/valkey/valkey.conf
+        valkey-server /usr/local/etc/valkey/valkey.conf
+    healthcheck:
+      test: "valkey-cli -p $${VALKEY_PORT} -a demo --raw incr ping"
+      start_period: 10s # wait for replicas sync
+      interval: 2s
+      retries: 20
+  valkey-replicas-2:
+    image: valkey/valkey:8.1
+    container_name: replicas-2
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - valkey-master
+    ports:
+      - 6381:6381
+    environment:
+      VALKEY_PORT: 6381
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/valkey/
+        cp /tmp/conf/valkey.conf /usr/local/etc/valkey/
+        sed -ir "s/^[#]*\s*port .*/port $${VALKEY_PORT}/" /usr/local/etc/valkey/valkey.conf
+        sed -i "$$ a replicaof $${HOST_IP} 6379" /usr/local/etc/valkey/valkey.conf
+        sed -i "$$ a replica-announce-ip $${HOST_IP}" /usr/local/etc/valkey/valkey.conf
+        valkey-server /usr/local/etc/valkey/valkey.conf
+    healthcheck:
+      test: "valkey-cli -p $${VALKEY_PORT} -a demo --raw incr ping"
+      start_period: 10s # wait for replicas sync
+      interval: 2s
+      retries: 20
+  sentinel-1:
+    image: valkey/valkey:8.1
+    container_name: sentinel-1
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - valkey-master
+      - valkey-replicas-1
+      - valkey-replicas-2
+    ports:
+      - 26379:26379
+    environment:
+      VALKEY_PORT: 26379
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/valkey/
+        cp /tmp/conf/sentinel.conf /usr/local/etc/valkey/
+        sed -ir "s/^[#]*\s*port .*/port $${VALKEY_PORT}/" /usr/local/etc/valkey/sentinel.conf
+        sed -i "$$ a sentinel monitor test $${HOST_IP} 6379 2" /usr/local/etc/valkey/sentinel.conf
+        sed -i "$$ a sentinel announce-ip $${HOST_IP}" /usr/local/etc/valkey/sentinel.conf
+        valkey-sentinel /usr/local/etc/valkey/sentinel.conf
+    healthcheck:
+      test: "valkey-cli -p $${VALKEY_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
+  sentinel-2:
+    image: valkey/valkey:8.1
+    container_name: sentinel-2
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - valkey-master
+      - valkey-replicas-1
+      - valkey-replicas-2
+    ports:
+      - 26380:26380
+    environment:
+      VALKEY_PORT: 26380
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/valkey/
+        cp /tmp/conf/sentinel.conf /usr/local/etc/valkey/
+        sed -ir "s/^[#]*\s*port .*/port $${VALKEY_PORT}/" /usr/local/etc/valkey/sentinel.conf
+        sed -i "$$ a sentinel monitor test $${HOST_IP} 6379 2" /usr/local/etc/valkey/sentinel.conf
+        sed -i "$$ a sentinel announce-ip $${HOST_IP}" /usr/local/etc/valkey/sentinel.conf
+        valkey-sentinel /usr/local/etc/valkey/sentinel.conf
+    healthcheck:
+      test: "valkey-cli -p $${VALKEY_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
+  sentinel-3:
+    image: valkey/valkey:8.1
+    container_name: sentinel-3
+    labels:
+      org.springframework.boot.ignore: true
+    depends_on:
+      - valkey-master
+      - valkey-replicas-1
+      - valkey-replicas-2
+    ports:
+      - 26381:26381
+    environment:
+      VALKEY_PORT: 26381
+      HOST_IP: "${HOST_IP}"
+    volumes:
+      - ./conf:/tmp/conf
+    sysctls:
+      - net.core.somaxconn=65535
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /usr/local/etc/valkey/
+        cp /tmp/conf/sentinel.conf /usr/local/etc/valkey/
+        sed -ir "s/^[#]*\s*port .*/port $${VALKEY_PORT}/" /usr/local/etc/valkey/sentinel.conf
+        sed -i "$$ a sentinel monitor test $${HOST_IP} 6379 2" /usr/local/etc/valkey/sentinel.conf
+        sed -i "$$ a sentinel announce-ip $${HOST_IP}" /usr/local/etc/valkey/sentinel.conf
+        valkey-sentinel /usr/local/etc/valkey/sentinel.conf
+    healthcheck:
+      test: "valkey-cli -p $${VALKEY_PORT} -a demo --raw incr ping"
+      interval: 2s
+      retries: 20
