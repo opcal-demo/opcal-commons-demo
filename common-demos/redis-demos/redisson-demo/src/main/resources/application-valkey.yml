@@ -1,5 +1,8 @@
 
 spring:
+  redis:
+    redisson:
+      file: classpath:redisson-valkey.yaml
   docker:
     compose:
       file:
