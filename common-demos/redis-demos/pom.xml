@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>common-demos</artifactId>
-        <version>3.5.0.0-SNAPSHOT</version>
+        <version>3.5.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>redis-demos</artifactId>
