@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>common-demos</artifactId>
-        <version>3.4.6.0-SNAPSHOT</version>
+        <version>3.4.7.0-SNAPSHOT</version>
     </parent>
 
     <packaging>pom</packaging>
