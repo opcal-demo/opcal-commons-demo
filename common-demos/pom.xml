@@ -48,7 +48,7 @@
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
         <mybatis-dynamic-sql.version>1.5.2</mybatis-dynamic-sql.version>
         <jasync-r2dbc-mysql.version>2.2.4</jasync-r2dbc-mysql.version>
-        <druid.version>1.2.26</druid.version>
+        <druid.version>1.2.27</druid.version>
         <randomuser-api.version>1.4.2</randomuser-api.version>
     </properties>
 
