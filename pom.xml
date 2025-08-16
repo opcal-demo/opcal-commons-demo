@@ -25,7 +25,7 @@
 
     <groupId>xyz.opcal.demo</groupId>
     <artifactId>opcal-commons-demo</artifactId>
-    <version>3.3.13.1-SNAPSHOT</version>
+    <version>3.3.13.2-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <modules>

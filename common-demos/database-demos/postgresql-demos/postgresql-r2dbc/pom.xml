@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>postgresql-demos</artifactId>
-        <version>3.3.13.1-SNAPSHOT</version>
+        <version>3.3.13.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>postgresql-r2dbc</artifactId>
