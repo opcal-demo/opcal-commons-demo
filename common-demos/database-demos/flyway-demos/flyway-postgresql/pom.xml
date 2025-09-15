@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>flyway-demos</artifactId>
-        <version>3.4.9.0-SNAPSHOT</version>
+        <version>3.4.10.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>flyway-postgresql</artifactId>
