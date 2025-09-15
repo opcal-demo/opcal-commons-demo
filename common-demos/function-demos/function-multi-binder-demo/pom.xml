@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>function-demos</artifactId>
-        <version>3.3.13.2-SNAPSHOT</version>
+        <version>3.3.13.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>function-multi-binder-demo</artifactId>
