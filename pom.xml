@@ -1,4 +1,4 @@
-<!--
+#<!--
   ~ Copyright 2020-2025 Opcal
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -159,7 +159,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <configuration>
-                    <rulesUri>file://${session.executionRootDirectory/ci/maven/rules.xml</rulesUri>
+                    <rulesUri>file://${session.executionRootDirectory}/ci/maven/rules.xml</rulesUri>
                 </configuration>
             </plugin>
         </plugins>
