@@ -8,10 +8,10 @@ spring:
     - 127.0.0.1:29092
     - 127.0.0.1:39092
     producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       transaction-id-prefix: tx.
     consumer:
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       enable-auto-commit: false
       properties:
         isolation.level: read_committed

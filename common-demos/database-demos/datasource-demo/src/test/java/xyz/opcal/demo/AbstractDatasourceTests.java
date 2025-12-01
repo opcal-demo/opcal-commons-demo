@@ -58,7 +58,7 @@ abstract class AbstractDatasourceTests {
 
 	@AfterAll
 	void after() {
-		final List<Map<String, Object>> users = jdbcTemplate.queryForList("SELECT * FROM user");
+		var users = jdbcTemplate.queryForList("SELECT * FROM user");
 		log.info("user info: \n" + users);
 	}
 
@@ -69,7 +69,7 @@ abstract class AbstractDatasourceTests {
 	}
 
 	UserEntity toUser(xyz.opcal.tools.response.result.User result) {
-		UserEntity user = new UserEntity();
+		var user = new UserEntity();
 		user.setFirstName(result.getName().getFirst());
 		user.setLastName(result.getName().getLast());
 		user.setGender(result.getGender());
@@ -80,14 +80,14 @@ abstract class AbstractDatasourceTests {
 	@Order(0)
 	@Test
 	void save() {
-		UserEntity user = generate(1).get(0);
+		var user = generate(1).getFirst();
 		assertDoesNotThrow(() -> userService.save(user));
 	}
 
 	@Test
 	@Order(1)
 	void testSaveInLombda() {
-		assertDoesNotThrow(() -> userService.saveInLombda(generate(10)));
+		assertDoesNotThrow(() -> userService.saveInLambda(generate(10)));
 	}
 
 	@Test
@@ -100,9 +100,9 @@ abstract class AbstractDatasourceTests {
 
 	@Test
 	@Order(3)
-	void testSaveErrorInforeach() {
+	void testSaveErrorInForeach() {
 		final long beforeTotal = userService.countAll();
-		assertThrows(RuntimeException.class, () -> userService.saveErrorInforeach(generate(10)));
+		assertThrows(RuntimeException.class, () -> userService.saveErrorInForeach(generate(10)));
 		assertEquals(beforeTotal, userService.countAll());
 	}
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
@@ -40,7 +40,7 @@ class UserControllerTests {
 	}
 
 	User toUser(xyz.opcal.tools.response.result.User result) {
-		User user = new User();
+		var user = new User();
 		user.setFirstName(result.getName().getFirst());
 		user.setLastName(result.getName().getLast());
 		user.setGender(result.getGender());

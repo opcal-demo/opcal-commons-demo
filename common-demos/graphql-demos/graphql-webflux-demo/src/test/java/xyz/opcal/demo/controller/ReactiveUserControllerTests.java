@@ -1,10 +1,10 @@
 package xyz.opcal.demo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -13,12 +13,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import xyz.opcal.demo.RandomuserUtils;
 import xyz.opcal.demo.entity.User;
@@ -40,9 +38,9 @@ class ReactiveUserControllerTests {
 	void init() {
 		var batch = 100;
 		var saveFlux = userRepository.saveAll(RandomuserUtils.generate(batch));
-		final Mono<Long> countMono = saveFlux.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
+		var countMono = saveFlux.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
 		StepVerifier.create(countMono).assertNext(total -> assertEquals(batch, total)).verifyComplete();
-		user = userRepository.findFirstByOrderByIdDesc().doOnNext(user -> assertNotNull(user)).doOnSuccess(System.out::println).block();
+		user = userRepository.findFirstByOrderByIdDesc().doOnNext(Assertions::assertNotNull).doOnSuccess(System.out::println).block();
 	}
 
 	@Test

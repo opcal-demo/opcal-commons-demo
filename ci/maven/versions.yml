@@ -12,9 +12,6 @@ version-registers:
     artifact-id: opcal-cloud-starter-parent
   - property-name: redisson.version
     update-policy: LATEST
-  - property-name: shardingsphere.version
-    update-policy: LATEST
-    enable: false
   - property-name: org.mapstruct.version
     update-policy: LATEST
   - property-name: lombok-mapstruct-binding.version

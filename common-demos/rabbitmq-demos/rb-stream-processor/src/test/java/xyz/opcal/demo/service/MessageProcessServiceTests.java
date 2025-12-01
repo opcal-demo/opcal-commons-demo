@@ -15,9 +15,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MessageProcessServiceTests {
@@ -53,7 +55,7 @@ class MessageProcessServiceTests {
 	@Test
 	@Order(1)
 	void ageCount() {
-		Awaitility.await().atMost(Duration.ofSeconds(60)).until(() -> CollectionUtils.isEmpty(userProcessService.getAgeCounter()) == false);
+		Awaitility.await().atMost(Duration.ofSeconds(60)).until(() -> !CollectionUtils.isEmpty(userProcessService.getAgeCounter()));
 		log.info("$$$$$ age count {}", userProcessService.getAgeCounter());
 	}
 

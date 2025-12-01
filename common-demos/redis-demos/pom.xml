@@ -22,29 +22,16 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>common-demos</artifactId>
-        <version>3.5.8.0-SNAPSHOT</version>
+        <version>4.0.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>redis-demos</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>redisson-demo</module>
+        <!-- wait for redisson new version release -->
+<!--        <module>redisson-demo</module>-->
         <module>lettuce-demo</module>
         <module>jedis-demo</module>
     </modules>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <forkedProcessExitTimeoutInSeconds>60</forkedProcessExitTimeoutInSeconds>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
 </project>

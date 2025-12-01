@@ -9,7 +9,7 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -46,7 +46,7 @@ public class RbTxApplication {
 
 	@Bean
 	public MessageConverter jsonConverter() {
-		return new Jackson2JsonMessageConverter();
+		return new JacksonJsonMessageConverter();
 	}
 
 	@Bean
