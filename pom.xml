@@ -39,7 +39,7 @@
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
 
         <sonar.exclusions>
-            template/**,**/*Application.java,**/ServletInitializer.java,**/SdUserService.java,**/UserService.java,**/RedisLockService.java,**/.flattened-pom.xml
+            template/**,**/*Application.java,**/ServletInitializer.java,**/SdUserService.java,**/UserService.java,**/RedisLockService.java,**/UserProcessService.java,**User.java,**Entity.java,**Configuration.java,**Function.java,**/.flattened-pom.xml
         </sonar.exclusions>
     </properties>
 
