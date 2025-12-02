@@ -28,5 +28,8 @@ version-registers:
     update-policy: LATEST
   - property-name: randomuser-api.version
     update-policy: LATEST
-  
+  - property-name: sonar-maven-plugin.version
+    update-policy: LATEST
+  - property-name: jacoco-maven-plugin.version
+    update-policy: LATEST
   
