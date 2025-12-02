@@ -2,7 +2,6 @@ package xyz.opcal.demo.service;
 
 import java.time.Duration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,11 @@ import xyz.opcal.demo.repository.UserRepository;
 @Service
 public class UserService {
 
-	private @Autowired UserRepository userRepository;
+	private final UserRepository userRepository;
+
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	public Mono<User> userById(Long id) {
 		return userRepository.findById(id);

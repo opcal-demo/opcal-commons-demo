@@ -37,7 +37,7 @@ class RedisLockServiceTests {
 	@Test
 	void concurrent() throws InterruptedException {
 		var key = UUID.randomUUID().toString();
-		for (int i = 0; i < 1000; i++) {
+		for (var i = 0; i < 1000; i++) {
 			executorService.submit(() -> assertEquals(key, redisLockService.get(key)));
 		}
 

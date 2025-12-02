@@ -2,8 +2,8 @@ package xyz.opcal.demo.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.security.SecureRandom;
 import java.time.Duration;
-import java.util.Random;
 
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.MethodOrderer;
@@ -26,7 +26,7 @@ class MessageServiceTests {
 	@Autowired
 	UserService userService;
 
-	Random random = new Random();
+	SecureRandom random = new SecureRandom();
 
 	@Test
 	@Order(0)

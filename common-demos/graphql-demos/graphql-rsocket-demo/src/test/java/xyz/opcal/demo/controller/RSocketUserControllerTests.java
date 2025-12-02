@@ -17,7 +17,6 @@ import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureG
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import xyz.opcal.demo.RandomuserUtils;
 import xyz.opcal.demo.entity.User;
@@ -40,7 +39,7 @@ class RSocketUserControllerTests {
 	void init() {
 		var batch = 100;
 		var saveFlux = userRepository.saveAll(RandomuserUtils.generate(batch));
-		final Mono<Long> countMono = saveFlux.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
+		var countMono = saveFlux.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
 		StepVerifier.create(countMono).assertNext(total -> assertEquals(batch, total)).verifyComplete();
 		user = userRepository.findFirstByOrderByIdDesc().doOnNext(user -> assertNotNull(user)).doOnSuccess(System.out::println).block();
 	}

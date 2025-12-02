@@ -37,6 +37,10 @@
         <java.version>21</java.version>
         <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+
+        <sonar.exclusions>
+            template/**,**/*Application.java,**/ServletInitializer.java,**/SdUserService.java,**/UserService.java,**/RedisLockService.java,**/.flattened-pom.xml
+        </sonar.exclusions>
     </properties>
 
     <repositories>

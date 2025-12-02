@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +18,22 @@ public class MessageService {
 
 	Logger producerLogger = LoggerFactory.getLogger("producer");
 
-	private @Autowired StreamBridge streamBridge;
+	private final StreamBridge streamBridge;
 
-	RandomuserClient randomuserClient = new RandomuserClient(System.getenv().getOrDefault("RANDOMUSER_API_URL", RandomuserClient.DEFAULT_API_URL));
+	public MessageService(StreamBridge streamBridge) {
+		this.streamBridge = streamBridge;
+	}
 
-	private AtomicLong idGenerator = new AtomicLong();
+	private final RandomuserClient randomuserClient = new RandomuserClient(
+			System.getenv().getOrDefault("RANDOMUSER_API_URL", RandomuserClient.DEFAULT_API_URL));
+
+	private final AtomicLong idGenerator = new AtomicLong();
 
 	public void create(int batch) {
 		var users = randomuserClient.random(RandomuserRequest.builder().results(batch)
 				.nationalities(new Nationalities[] { Nationalities.AU, Nationalities.GB, Nationalities.CA, Nationalities.US, Nationalities.NZ }).build())
 				.getResults();
-		for (xyz.opcal.tools.response.result.User user : users) {
+		for (var user : users) {
 			var data = new User(idGenerator.incrementAndGet(), LocalDateTime.now(), LocalDateTime.now(), user.getName().getFirst(), user.getName().getLast(),
 					user.getGender(), user.getDob().getAge());
 			streamBridge.send("new-user-out-0", data);

@@ -44,7 +44,7 @@ class ReactiveUserRepositoryTests {
 	@Test
 	@Order(1)
 	void findPage() {
-		final var pageSize = 50;
+		var pageSize = 50;
 		var result = userRepository.findBy(PageRequest.of(0, pageSize));
 		var countMono = result.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
 		StepVerifier.create(countMono).assertNext(total -> assertEquals(pageSize, total)).verifyComplete();

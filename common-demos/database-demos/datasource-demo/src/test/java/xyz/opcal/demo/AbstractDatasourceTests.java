@@ -93,7 +93,7 @@ abstract class AbstractDatasourceTests {
 	@Test
 	@Order(2)
 	void testSaveErrorAfter() {
-		final long beforeTotal = userService.countAll();
+		var beforeTotal = userService.countAll();
 		var users = generate(10);
 		assertThrows(RuntimeException.class, () -> userService.saveErrorAfter(users));
 		assertEquals(beforeTotal, userService.countAll());
@@ -102,7 +102,7 @@ abstract class AbstractDatasourceTests {
 	@Test
 	@Order(3)
 	void testSaveErrorInForeach() {
-		final long beforeTotal = userService.countAll();
+		var beforeTotal = userService.countAll();
 		var users = generate(10);
 		assertThrows(RuntimeException.class, () -> userService.saveErrorInForeach(users));
 		assertEquals(beforeTotal, userService.countAll());

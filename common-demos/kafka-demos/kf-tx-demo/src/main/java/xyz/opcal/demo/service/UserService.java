@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,14 @@ public class UserService {
 	Logger producerLogger = LoggerFactory.getLogger("producer");
 	Logger consumerLogger = LoggerFactory.getLogger("consumer");
 
-	private @Autowired KafkaTemplate<String, xyz.opcal.tools.response.result.User> kafkaTemplate;
-	private @Autowired UserRepository userRepository;
-	private AtomicLong testCounter = new AtomicLong();
+	private final KafkaTemplate<String, xyz.opcal.tools.response.result.User> kafkaTemplate;
+	private final UserRepository userRepository;
+	private final AtomicLong testCounter = new AtomicLong();
+
+	public UserService(KafkaTemplate<String, xyz.opcal.tools.response.result.User> kafkaTemplate, UserRepository userRepository) {
+		this.kafkaTemplate = kafkaTemplate;
+		this.userRepository = userRepository;
+	}
 
 	RandomuserClient randomuserClient = new RandomuserClient(System.getenv().getOrDefault("RANDOMUSER_API_URL", RandomuserClient.DEFAULT_API_URL));
 
@@ -34,7 +38,7 @@ public class UserService {
 		var users = randomuserClient.random(RandomuserRequest.builder().results(batch)
 				.nationalities(new Nationalities[] { Nationalities.AU, Nationalities.GB, Nationalities.CA, Nationalities.US, Nationalities.NZ }).build())
 				.getResults();
-		for (xyz.opcal.tools.response.result.User user : users) {
+		for (var user : users) {
 			kafkaTemplate.send("randomuser", user);
 			producerLogger.info("#### send user [{}]", user);
 		}

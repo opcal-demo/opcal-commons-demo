@@ -16,7 +16,7 @@ import xyz.opcal.demo.model.AgeRange;
 @Service
 public class UserProcessService {
 
-	Logger consumerLogger = LoggerFactory.getLogger("consumer");
+	private final Logger consumerLogger = LoggerFactory.getLogger("consumer");
 
 	@Getter
 	private Map<String, Integer> ageCounter = new ConcurrentHashMap<>();

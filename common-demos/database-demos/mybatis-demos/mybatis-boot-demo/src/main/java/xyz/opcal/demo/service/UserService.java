@@ -4,10 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.mybatis.dynamic.sql.SqlBuilder;
-import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
 import org.mybatis.dynamic.sql.render.MyBatis3RenderingStrategy;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +46,7 @@ public class UserService {
 		user.setCreatedDate(LocalDateTime.now());
 		user.setModifiedDate(LocalDateTime.now());
 		// @formatter:off
-		final InsertStatementProvider<User> insertStatement = SqlBuilder.insert(user)
+		var insertStatement = SqlBuilder.insert(user)
 				.into(UserDynamicSqlSupport.user)
 				.map(UserDynamicSqlSupport.id).toProperty(User.ID)
 				.map(UserDynamicSqlSupport.createdDate).toProperty(User.CREATED_DATE)
@@ -66,7 +63,7 @@ public class UserService {
 
 	public User getLastOne() {
 		// @formatter:off
-		final SelectStatementProvider selectStatement = SqlBuilder.select(UserDynamicSqlSupport.id, 
+		var selectStatement = SqlBuilder.select(UserDynamicSqlSupport.id, 
 				UserDynamicSqlSupport.createdDate,UserDynamicSqlSupport.modifiedDate, UserDynamicSqlSupport.firstName,
 						UserDynamicSqlSupport.lastName, UserDynamicSqlSupport.gender, UserDynamicSqlSupport.age)
 				.from(UserDynamicSqlSupport.user)
@@ -81,7 +78,7 @@ public class UserService {
 
 	public void update(User user) {
 		// @formatter:off
-		final UpdateStatementProvider updateStatement = SqlBuilder.update(UserDynamicSqlSupport.user)
+		var updateStatement = SqlBuilder.update(UserDynamicSqlSupport.user)
 				.set(UserDynamicSqlSupport.modifiedDate).equalTo(LocalDateTime.now())
 				.set(UserDynamicSqlSupport.firstName).equalTo(user.getFirstName())
 				.set(UserDynamicSqlSupport.lastName).equalTo(user.getLastName())

@@ -2,7 +2,6 @@ package xyz.opcal.demo.controller;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +15,13 @@ import xyz.opcal.demo.service.UserProcessService;
 @RequestMapping("/message")
 public class MessageController {
 
-	private @Autowired MessageSourceService messageSourceService;
-	private @Autowired UserProcessService userProcessService;
+	private final MessageSourceService messageSourceService;
+	private final UserProcessService userProcessService;
+
+	public MessageController(MessageSourceService messageSourceService, UserProcessService userProcessService) {
+		this.messageSourceService = messageSourceService;
+		this.userProcessService = userProcessService;
+	}
 
 	@PostMapping("/create")
 	public String create(@RequestParam int batch) {

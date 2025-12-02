@@ -2,7 +2,6 @@ package xyz.opcal.demo.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +13,11 @@ import xyz.opcal.demo.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 
-	private @Autowired UserService userService;
+	private final UserService userService;
+
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 
 	@PostMapping("/create")
 	public List<xyz.opcal.tools.response.result.User> create(@RequestParam int batch) {

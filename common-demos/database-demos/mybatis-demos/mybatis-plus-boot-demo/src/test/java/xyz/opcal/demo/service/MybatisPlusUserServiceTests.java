@@ -10,8 +10,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import xyz.opcal.demo.domain.User;
-
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MybatisPlusUserServiceTests {
@@ -34,7 +32,7 @@ class MybatisPlusUserServiceTests {
 	@Test
 	@Order(2)
 	void update() {
-		final User user = userService.getLastOne();
+		var user = userService.getLastOne();
 		user.setLastName(user.getLastName() + "--update");
 		assertDoesNotThrow(() -> userService.update(user));
 	}

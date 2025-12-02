@@ -14,7 +14,7 @@ public class UserService {
 
 	Logger consumerLogger = LoggerFactory.getLogger("consumer");
 
-	private AtomicLong messageCounter = new AtomicLong();
+	private final AtomicLong messageCounter = new AtomicLong();
 
 	public long consumeCount() {
 		return messageCounter.get();

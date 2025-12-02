@@ -24,7 +24,7 @@ public class UserService {
 		var result = randomuserClient.random(RandomuserRequest.builder().results(batch)
 				.nationalities(new Nationalities[] { Nationalities.AU, Nationalities.GB, Nationalities.CA, Nationalities.US, Nationalities.NZ }).build())
 				.getResults();
-		for (xyz.opcal.tools.response.result.User user : result) {
+		for (var user : result) {
 			users.add(new User(idGenerator.incrementAndGet(), user.getName().getFirst(), user.getName().getLast(), user.getGender(), user.getDob().getAge()));
 		}
 		return result;

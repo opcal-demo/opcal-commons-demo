@@ -11,7 +11,6 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +27,14 @@ public class UserService {
 	Logger producerLogger = LoggerFactory.getLogger("producer");
 	Logger consumerLogger = LoggerFactory.getLogger("consumer");
 
-	private @Autowired RabbitTemplate rabbitTemplate;
-	private @Autowired UserRepository userRepository;
-	private AtomicLong testCounter = new AtomicLong();
+	private final RabbitTemplate rabbitTemplate;
+	private final UserRepository userRepository;
+	private final AtomicLong testCounter = new AtomicLong();
+
+	public UserService(RabbitTemplate rabbitTemplate, UserRepository userRepository) {
+		this.rabbitTemplate = rabbitTemplate;
+		this.userRepository = userRepository;
+	}
 
 	RandomuserClient randomuserClient = new RandomuserClient(System.getenv().getOrDefault("RANDOMUSER_API_URL", RandomuserClient.DEFAULT_API_URL));
 
@@ -39,7 +43,7 @@ public class UserService {
 		var users = randomuserClient.random(RandomuserRequest.builder().results(batch)
 				.nationalities(new Nationalities[] { Nationalities.AU, Nationalities.GB, Nationalities.CA, Nationalities.US, Nationalities.NZ }).build())
 				.getResults();
-		for (xyz.opcal.tools.response.result.User user : users) {
+		for (var user : users) {
 			rabbitTemplate.convertAndSend(RbTxApplication.EXCHANGE_NAME, "commons.demo.randomuser", user);
 			producerLogger.info("#### send user [{}]", user);
 		}

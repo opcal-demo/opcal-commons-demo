@@ -3,8 +3,6 @@ package xyz.opcal.demo.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.List;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import reactor.test.StepVerifier;
-import xyz.opcal.demo.entity.User;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -26,8 +23,8 @@ class UserServiceR2dbcTests {
 	@Test
 	@Order(0)
 	void save() {
-		final List<User> generateUsers = userService.generate(DATA_SIZE);
-		for (User user : generateUsers) {
+		var generateUsers = userService.generate(DATA_SIZE);
+		for (var user : generateUsers) {
 			var verifierMono = userService.save(user).doOnSuccess(System.out::println);
 			StepVerifier.create(verifierMono).assertNext(saved -> assertNotNull(saved.id())).verifyComplete();
 		}
