@@ -2,7 +2,6 @@ package xyz.opcal.demo.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,12 @@ import xyz.opcal.tools.request.param.Nationalities;
 @Transactional
 public class SdUserService {
 
-	private @Autowired SdUserMapper userMapper;
+	private final SdUserMapper userMapper;
+
+	public SdUserService(SdUserMapper userMapper) {
+		this.userMapper = userMapper;
+	}
+
 	RandomuserClient randomuserClient = new RandomuserClient(System.getenv().getOrDefault("RANDOMUSER_API_URL", RandomuserClient.DEFAULT_API_URL));
 
 	public List<SdUser> generate(int batch) {

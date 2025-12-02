@@ -1,5 +1,6 @@
 package xyz.opcal.demo.domain;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SdUser implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 4447256607699370956L;
 
 	@TableId(type = IdType.AUTO)
