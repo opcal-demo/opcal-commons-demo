@@ -3,8 +3,6 @@ package xyz.opcal.demo.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
-import xyz.opcal.demo.entity.User;
 
 @Slf4j
 @SpringBootTest
@@ -33,7 +30,7 @@ class UserServiceTests {
 	@Test
 	@Order(1)
 	void getAll() {
-		final List<User> all = userService.getAll();
+		var all = userService.getAll();
 		log.info("all users {}", all);
 		assertEquals(DATA_SIZE, all.size());
 	}

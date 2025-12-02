@@ -12,8 +12,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import xyz.opcal.demo.entity.User;
 
@@ -30,7 +28,7 @@ class UserServiceR2dbcTests {
 	void save() {
 		final List<User> generateUsers = userService.generate(DATA_SIZE);
 		for (User user : generateUsers) {
-			final Mono<User> verifierMono = userService.save(user).doOnSuccess(System.out::println);
+			var verifierMono = userService.save(user).doOnSuccess(System.out::println);
 			StepVerifier.create(verifierMono).assertNext(saved -> assertNotNull(saved.id())).verifyComplete();
 		}
 	}
@@ -38,8 +36,8 @@ class UserServiceR2dbcTests {
 	@Test
 	@Order(1)
 	void getAll() {
-		final Flux<User> all = userService.getAll();
-		final Mono<Long> countMono = all.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
+		var all = userService.getAll();
+		var countMono = all.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
 		StepVerifier.create(countMono).assertNext(total -> assertEquals(DATA_SIZE, total)).verifyComplete();
 	}
 

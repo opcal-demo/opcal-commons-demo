@@ -2,7 +2,6 @@ package xyz.opcal.demo.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import xyz.opcal.demo.entity.User;
@@ -16,7 +15,11 @@ public class UserService {
 
 	static final String USER_CACHE_KEY = "user";
 
-	private @Autowired UserRepository userRepository;
+	private final UserRepository userRepository;
+
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	RandomuserClient randomuserClient = new RandomuserClient(System.getenv().getOrDefault("RANDOMUSER_API_URL", RandomuserClient.DEFAULT_API_URL));
 

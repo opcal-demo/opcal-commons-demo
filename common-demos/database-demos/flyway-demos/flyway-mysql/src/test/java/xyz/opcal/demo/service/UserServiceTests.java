@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.util.List;
-import java.util.Map;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,7 +14,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
-import xyz.opcal.demo.entity.User;
 
 @Slf4j
 @SpringBootTest
@@ -38,7 +34,7 @@ class UserServiceTests {
 	@Test
 	@Order(1)
 	void getAll() {
-		final List<User> all = userService.getAll();
+		var all = userService.getAll();
 		assertEquals(DATA_SIZE, all.size());
 		log.info("{}", all);
 	}
@@ -46,7 +42,7 @@ class UserServiceTests {
 	@Test
 	@Order(1)
 	void checkHistory() {
-		final List<Map<String, Object>> results = jdbcTemplate.queryForList("SELECT * FROM flyway_schema_history");
+		var results = jdbcTemplate.queryForList("SELECT * FROM flyway_schema_history");
 		assertFalse(CollectionUtils.isEmpty(results));
 		log.info("history results: \n{}", results);
 	}

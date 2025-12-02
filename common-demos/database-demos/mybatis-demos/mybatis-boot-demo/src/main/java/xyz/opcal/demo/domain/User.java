@@ -1,5 +1,6 @@
 package xyz.opcal.demo.domain;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ public class User implements Serializable {
 	public static final String LAST_NAME = "lastName";
 	public static final String GENDER = "gender";
 	public static final String AGE = "age";
-	
+
+	@Serial
 	private static final long serialVersionUID = 4447256607699370956L;
 
 	private Long id;
