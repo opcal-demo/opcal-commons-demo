@@ -1,6 +1,6 @@
 services:
   valkey-master:
-    image: valkey/valkey:8.1
+    image: valkey/valkey:9.0
     container_name: valkey-master
     labels:
       org.springframework.boot.ignore: true
@@ -26,7 +26,7 @@ services:
       interval: 2s
       retries: 20
   valkey-replicas-1:
-    image: valkey/valkey:8.1
+    image: valkey/valkey:9.0
     container_name: valkey-replicas-1
     labels:
       org.springframework.boot.ignore: true
@@ -57,7 +57,7 @@ services:
       interval: 2s
       retries: 20
   valkey-replicas-2:
-    image: valkey/valkey:8.1
+    image: valkey/valkey:9.0
     container_name: valkey-replicas-2
     labels:
       org.springframework.boot.ignore: true
@@ -88,7 +88,7 @@ services:
       interval: 2s
       retries: 20
   sentinel-1:
-    image: valkey/valkey:8.1
+    image: valkey/valkey:9.0
     container_name: valkey-sentinel-1
     labels:
       org.springframework.boot.ignore: true
@@ -120,7 +120,7 @@ services:
       interval: 2s
       retries: 20
   sentinel-2:
-    image: valkey/valkey:8.1
+    image: valkey/valkey:9.0
     container_name: valkey-sentinel-2
     labels:
       org.springframework.boot.ignore: true
@@ -152,7 +152,7 @@ services:
       interval: 2s
       retries: 20
   sentinel-3:
-    image: valkey/valkey:8.1
+    image: valkey/valkey:9.0
     container_name: valkey-sentinel-3
     labels:
       org.springframework.boot.ignore: true

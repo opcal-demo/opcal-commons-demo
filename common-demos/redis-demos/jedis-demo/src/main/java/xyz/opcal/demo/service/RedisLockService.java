@@ -15,6 +15,7 @@ public class RedisLockService {
 
 	private final RedisLockRegistry redisLockRegistry;
 
+	private final AtomicLong tryCounter = new AtomicLong();
 	private final AtomicLong counter = new AtomicLong();
 
 	public RedisLockService(RedisLockRegistry redisLockRegistry) {
@@ -23,15 +24,21 @@ public class RedisLockService {
 
 	public String get(String key) {
 		var lock = redisLockRegistry.obtain(key);
+		var isLock = false;
 		try {
-			if (lock.tryLock(30, TimeUnit.MILLISECONDS)) {
-				log.info("Lock key: {}, count {}", key, counter.incrementAndGet());
+			var tryNum = tryCounter.incrementAndGet();
+			log.info("try Lock key: {}, count {}", key, tryNum);
+			isLock = lock.tryLock(10, TimeUnit.MILLISECONDS);
+			if (isLock) {
+				log.info("Lock key: {}, try {} count {}", key, tryNum, counter.incrementAndGet());
 			}
 			return UUID.fromString(key).toString();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		} finally {
-			lock.unlock();
+			if (isLock) {
+				lock.unlock();
+			}
 		}
 	}
 
