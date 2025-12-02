@@ -1,10 +1,10 @@
 package xyz.opcal.demo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -41,7 +41,7 @@ class RSocketUserControllerTests {
 		var saveFlux = userRepository.saveAll(RandomuserUtils.generate(batch));
 		var countMono = saveFlux.doOnNext(System.out::println).publish().autoConnect().count().doOnSuccess(System.out::println);
 		StepVerifier.create(countMono).assertNext(total -> assertEquals(batch, total)).verifyComplete();
-		user = userRepository.findFirstByOrderByIdDesc().doOnNext(user -> assertNotNull(user)).doOnSuccess(System.out::println).block();
+		user = userRepository.findFirstByOrderByIdDesc().doOnNext(Assertions::assertNotNull).doOnSuccess(System.out::println).block();
 	}
 
 	@Test
@@ -66,7 +66,7 @@ class RSocketUserControllerTests {
 
 	@Test
 	@Order(4)
-	void subscriptionVerifyAllData() throws InterruptedException {
+	void subscriptionVerifyAllData() {
 		var total = graphQlTester.documentName("count").execute().path("count").entity(Long.class).get();
 		StepVerifier.create(this.graphQlTester.documentName("fetchAll").executeSubscription().toFlux()) //
 				.consumeNextWith(response -> response.path("fetchAll").hasValue())//
