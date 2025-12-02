@@ -61,7 +61,9 @@ pipeline {
                             sh "export HOST_IP=${env.HOST_IP};"
                             sh "export PULL_POLICY=${params.PULL_POLICY};"
                             withCredentials([string(credentialsId: 'randomuser-api-url', variable: 'RANDOMUSER_API_URL')]) {
-                                sh './mvnw -U clean verify '
+                                withSonarQubeEnv('sqscan') {
+                                    sh "./mvnw -U clean verify sonar:sonar -Dsonar.projectKey=xyz.opcal.demo:opcal-commons-demo -Dsonar.projectName='opcal-commons-demo'"
+                                }
                             }
                             sh 'docker container prune -f'
                             sh 'docker image prune -f'
