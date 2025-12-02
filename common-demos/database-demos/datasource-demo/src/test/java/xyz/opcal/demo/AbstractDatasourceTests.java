@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -59,7 +58,7 @@ abstract class AbstractDatasourceTests {
 	@AfterAll
 	void after() {
 		var users = jdbcTemplate.queryForList("SELECT * FROM user");
-		log.info("user info: \n" + users);
+		log.info("user info: \n {}", users);
 	}
 
 	public List<UserEntity> generate(int batch) {
@@ -87,14 +86,16 @@ abstract class AbstractDatasourceTests {
 	@Test
 	@Order(1)
 	void testSaveInLombda() {
-		assertDoesNotThrow(() -> userService.saveInLambda(generate(10)));
+		var users = generate(10);
+		assertDoesNotThrow(() -> userService.saveInLambda(users));
 	}
 
 	@Test
 	@Order(2)
 	void testSaveErrorAfter() {
 		final long beforeTotal = userService.countAll();
-		assertThrows(RuntimeException.class, () -> userService.saveErrorAfter(generate(10)));
+		var users = generate(10);
+		assertThrows(RuntimeException.class, () -> userService.saveErrorAfter(users));
 		assertEquals(beforeTotal, userService.countAll());
 	}
 
@@ -102,7 +103,8 @@ abstract class AbstractDatasourceTests {
 	@Order(3)
 	void testSaveErrorInForeach() {
 		final long beforeTotal = userService.countAll();
-		assertThrows(RuntimeException.class, () -> userService.saveErrorInForeach(generate(10)));
+		var users = generate(10);
+		assertThrows(RuntimeException.class, () -> userService.saveErrorInForeach(users));
 		assertEquals(beforeTotal, userService.countAll());
 	}
 
