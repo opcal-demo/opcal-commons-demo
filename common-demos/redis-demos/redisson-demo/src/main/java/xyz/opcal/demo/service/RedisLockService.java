@@ -1,7 +1,7 @@
 package xyz.opcal.demo.service;
 
+import java.time.Duration;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.integration.redis.util.RedisLockRegistry;
@@ -24,12 +24,9 @@ public class RedisLockService {
 	public String get(String key) {
 		var lock = redisLockRegistry.obtain(key);
 		try {
-			if (lock.tryLock(30, TimeUnit.MILLISECONDS)) {
-				log.info("Lock key: {}, count {}", key, counter.incrementAndGet());
-			}
+			lock.lock(Duration.ofMillis(30));
+			log.info("Lock key: {}, count {}", key, counter.incrementAndGet());
 			return UUID.fromString(key).toString();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
 		} finally {
 			lock.unlock();
 		}

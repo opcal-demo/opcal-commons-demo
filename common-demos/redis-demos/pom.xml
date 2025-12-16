@@ -28,8 +28,7 @@
     <artifactId>redis-demos</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <!-- wait for redisson new version release -->
-<!--        <module>redisson-demo</module>-->
+        <module>redisson-demo</module>
         <module>lettuce-demo</module>
         <module>jedis-demo</module>
     </modules>

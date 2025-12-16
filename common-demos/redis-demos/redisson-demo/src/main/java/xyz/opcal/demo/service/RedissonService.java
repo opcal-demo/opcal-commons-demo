@@ -24,11 +24,9 @@ public class RedissonService {
 	public String get(String key) {
 		var fairLock = redisson.getFairLock("redisson-lock" + key);
 		try {
-			fairLock.tryLock(30, 30, TimeUnit.MILLISECONDS);
+			fairLock.lock(30, TimeUnit.MILLISECONDS);
 			log.info("Lock key: {}, count {}", key, counter.incrementAndGet());
 			return UUID.fromString(key).toString();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
 		} finally {
 			fairLock.unlock();
 		}
