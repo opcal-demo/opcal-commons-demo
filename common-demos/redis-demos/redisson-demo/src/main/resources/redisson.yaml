@@ -3,9 +3,10 @@ sentinelServersConfig:
   connectTimeout: 10000
   timeout: 3000
   retryAttempts: 3
-  retryInterval: 1500
+  retryDelay: !<org.redisson.config.EqualJitterDelay> { baseDelay: PT1S, maxDelay: PT2S }
+  reconnectionDelay: !<org.redisson.config.EqualJitterDelay> { baseDelay: PT0.1S, maxDelay: PT10S }
   failedSlaveReconnectionInterval: 3000
-  failedSlaveCheckInterval: 60000
+  failedSlaveNodeDetector: !<org.redisson.client.FailedConnectionDetector> {}
   password: demo
   subscriptionsPerConnection: 500
   clientName: null
@@ -19,12 +20,12 @@ sentinelServersConfig:
   readMode: "SLAVE"
   subscriptionMode: "SLAVE"
   sentinelAddresses:
-  - "redis://${HOST_IP}:26379"
-  - "redis://${HOST_IP}:26381"
-  - "redis://${HOST_IP}:26381"
+    - "redis://${HOST_IP}:26379"
+    - "redis://${HOST_IP}:36380"
+    - "redis://${HOST_IP}:26381"
   masterName: "test"
   database: 9
 threads: 16
 nettyThreads: 32
-codec: !<org.redisson.codec.JsonJacksonCodec> {}
+codec: !<org.redisson.codec.Kryo5Codec> {}
 transportMode: "NIO"
