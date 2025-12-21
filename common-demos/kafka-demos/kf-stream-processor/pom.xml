@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>kafka-demos</artifactId>
-        <version>3.5.8.0-SNAPSHOT</version>
+        <version>3.5.9.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>kf-stream-processor</artifactId>
