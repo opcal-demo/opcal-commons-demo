@@ -22,7 +22,7 @@
     <parent>
         <groupId>xyz.opcal.demo</groupId>
         <artifactId>database-demos</artifactId>
-        <version>4.0.0.0-SNAPSHOT</version>
+        <version>4.0.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>mybatis-demos</artifactId>
