@@ -42,9 +42,9 @@ pipeline {
             steps {
                 cache(caches: [
                         arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: '', includes: '**/*', path: '/var/cache/docker')
-                ],
-                        defaultBranch: 'main',
-                        maxCacheSize: 0) {
+                    ],
+                    defaultBranch: 'main',
+                    maxCacheSize: 0) {
                     container("dind-jdk-21") {
                         script {
                             sh '''
