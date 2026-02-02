@@ -20,5 +20,18 @@
                 <ignoreVersion type="regex">.*B*</ignoreVersion>
             </ignoreVersions>
         </rule>
+        <rule comparisonMethod="maven">
+            <ignoreVersions>
+                <!-- ignore alpha|beta -->
+                <ignoreVersion type="regex">.*alpha.*</ignoreVersion>
+                <ignoreVersion type="regex">.*Alpha.*</ignoreVersion>
+                <ignoreVersion type="regex">.*ALPHA.*</ignoreVersion>
+                <ignoreVersion type="regex">.*beta.*</ignoreVersion>
+                <ignoreVersion type="regex">.*Beta.*</ignoreVersion>
+                <ignoreVersion type="regex">.*BETA.*</ignoreVersion>
+                <ignoreVersion type="regex">.*preview*</ignoreVersion>
+                <ignoreVersion type="regex">.*Dev.*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
     </rules>
 </ruleset>
