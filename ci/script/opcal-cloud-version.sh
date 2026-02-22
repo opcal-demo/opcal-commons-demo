@@ -15,3 +15,5 @@ VERSION=$(props value ${DEPENDENCIES_FILE} opcal-cloud-starter-parent.version)
 echo "opcal cloud version is [${VERSION}]"
 # update opcal-cloud-starter-parent version
 xmlstarlet edit -P -L -O -u "/_:project/_:parent/_:version" -v ${VERSION} ${ROOT_PATH}/pom.xml
+
+echo "opcal cloud parent version update successfully!"
