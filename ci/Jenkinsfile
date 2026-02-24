@@ -14,6 +14,10 @@ pipeline {
         choice choices: ['missing', 'always'], name: 'PULL_POLICY'
     }
 
+    environment {
+        MAVEN_ARGS = "--batch-mode --errors --no-transfer-progress"
+    }
+
     stages {
         stage('Validation') {
             steps {
@@ -83,21 +87,18 @@ pipeline {
             cleanWs()
         }
         failure {
+            script {
+                env.AI_EXPLAIN = explainError(
+                        maxLines: 100000
+                )
+            }
             withCredentials([
-                string(credentialsId: 'ALERT_MAIL', variable: 'SEND_TO'),
-                string(credentialsId: 'n8n-trigger-url-ai-error', variable: 'N8N_URL')
+                    string(credentialsId: 'ALERT_MAIL', variable: 'SEND_TO')
             ]) {
-                httpRequest( httpMode: 'POST',
-                    acceptType: 'APPLICATION_JSON',
-                    contentType: 'APPLICATION_JSON',
-                    authentication: 'n8n-trigger-ai-error',
-                    requestBody: """{
-                        "buildUrl": "${env.BUILD_URL}",
-                        "sendTo": "${SEND_TO}",
-                        "subject": "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}!"
-                    }""",
-                    url: "${N8N_URL}",
-                    wrapAsMultipart: false
+                emailext(
+                        to: "${SEND_TO}",
+                        subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}!",
+                        body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}. \n\n${env.AI_EXPLAIN}\n\nCheck console output at ${env.BUILD_URL} to view the results."
                 )
             }
         }
