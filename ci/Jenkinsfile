@@ -14,6 +14,11 @@ pipeline {
         choice choices: ['missing', 'always'], name: 'PULL_POLICY'
     }
 
+    environment {
+        MAVEN_ARGS = "--batch-mode --errors --no-transfer-progress"
+        OL_MODEL = "glm-4.7-flash:q4_K_M"
+    }
+
     stages {
         stage('Validation') {
             steps {
@@ -92,7 +97,8 @@ pipeline {
                     requestBody: """{
                         "buildUrl": "${env.BUILD_URL}",
                         "sendTo": "${SEND_TO}",
-                        "subject": "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}!"
+                        "subject": "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}!",
+                        "model": "${env.OL_MODEL}"
                     }""",
                     url: "${N8N_URL}",
                     wrapAsMultipart: false
