@@ -16,7 +16,7 @@ pipeline {
 
     environment {
         MAVEN_ARGS = "--batch-mode --errors --no-transfer-progress"
-        OL_MODEL = "glm-4.7-flash:q4_K_M"
+        OL_MODEL = "qwen3.5:35b"
     }
 
     stages {
