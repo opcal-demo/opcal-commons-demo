@@ -19,13 +19,13 @@
     <parent>
         <groupId>xyz.opcal.cloud</groupId>
         <artifactId>opcal-cloud-starter-parent</artifactId>
-        <version>4.0.7.0</version>
+        <version>4.1.0.0</version>
         <relativePath/>
     </parent>
 
     <groupId>xyz.opcal.demo</groupId>
     <artifactId>opcal-commons-demo</artifactId>
-    <version>4.0.7.0-SNAPSHOT</version>
+    <version>4.1.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <modules>
