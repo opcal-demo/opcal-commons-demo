@@ -31,12 +31,12 @@ public class RbTxApplication {
 
 	@Bean(EXCHANGE_NAME)
 	public Exchange exchange() {
-		return ExchangeBuilder.topicExchange(EXCHANGE_NAME).durable(false).autoDelete().build();
+		return ExchangeBuilder.topicExchange(EXCHANGE_NAME).durable(true).autoDelete().build();
 	}
 
 	@Bean(QUEUE_NAME)
 	public Queue queue() {
-		return new Queue(QUEUE_NAME, false, false, true);
+		return new Queue(QUEUE_NAME, true, false, true);
 	}
 
 	@Bean
