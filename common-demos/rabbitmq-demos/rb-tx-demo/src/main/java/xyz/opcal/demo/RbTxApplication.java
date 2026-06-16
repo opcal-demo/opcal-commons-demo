@@ -7,11 +7,10 @@ import java.util.Optional;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -31,17 +30,17 @@ public class RbTxApplication {
 
 	@Bean(EXCHANGE_NAME)
 	public Exchange exchange() {
-		return ExchangeBuilder.topicExchange(EXCHANGE_NAME).durable(false).autoDelete().build();
+		return new TopicExchange(EXCHANGE_NAME, true, true);
 	}
 
 	@Bean(QUEUE_NAME)
 	public Queue queue() {
-		return new Queue(QUEUE_NAME, false, false, true);
+		return new Queue(QUEUE_NAME, true, false, true);
 	}
 
 	@Bean
-	Binding demoBinding(@Qualifier(QUEUE_NAME) Queue queue, @Qualifier(EXCHANGE_NAME) Exchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with("commons.demo.#").noargs();
+	Binding demoBinding() {
+		return BindingBuilder.bind(queue()).to(exchange()).with("commons.demo.#").noargs();
 	}
 
 	@Bean
