@@ -9,5 +9,6 @@ spring:
         - ../valkey/docker-compose.yml
       stop:
         command: down
+        timeout: 60s
       skip:
         in-tests: false
