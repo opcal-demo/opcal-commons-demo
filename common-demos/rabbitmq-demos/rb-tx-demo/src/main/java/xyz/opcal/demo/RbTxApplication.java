@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +30,7 @@ public class RbTxApplication {
 
 	@Bean(EXCHANGE_NAME)
 	public Exchange exchange() {
-		return new TopicExchange(EXCHANGE_NAME, true, true);
+		return ExchangeBuilder.topicExchange(EXCHANGE_NAME).durable(true).autoDelete().build();
 	}
 
 	@Bean(QUEUE_NAME)
