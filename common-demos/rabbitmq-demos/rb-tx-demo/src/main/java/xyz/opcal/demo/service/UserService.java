@@ -56,12 +56,12 @@ public class UserService {
 	@RabbitListener(bindings = @QueueBinding(
 			value = @Queue(
 					name = RbTxApplication.QUEUE_NAME, 
-					durable = "false", 
+					durable = "true",
 					autoDelete = "true"), 
 			exchange = @Exchange(
 					name = RbTxApplication.EXCHANGE_NAME, 
 					type = ExchangeTypes.TOPIC, 
-					durable = Exchange.FALSE, 
+					durable = Exchange.TRUE,
 					autoDelete = Exchange.TRUE)
 			)
 	)
