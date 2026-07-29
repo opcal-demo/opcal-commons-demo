@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker pull mysql:8.0
+docker pull mysql:8.4
 docker pull postgres:17
 docker pull apache/kafka:latest
 docker pull rabbitmq:management
