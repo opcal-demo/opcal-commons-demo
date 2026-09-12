@@ -16,6 +16,7 @@ pipeline {
 
     environment {
         MAVEN_ARGS = "--batch-mode --errors --no-transfer-progress"
+        OL_MODEL = "ornith:35b-q8_0"
     }
 
     stages {
@@ -47,7 +48,7 @@ pipeline {
                 cache(caches: [
                         arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: '', includes: '**/*', path: '/var/cache/docker')
                     ],
-                    defaultBranch: 'main',
+                    defaultBranch: '4.0.x',
                     maxCacheSize: 0) {
                     container("dind-jdk-21") {
                         script {
@@ -87,18 +88,22 @@ pipeline {
             cleanWs()
         }
         failure {
-            script {
-                env.AI_EXPLAIN = explainError(
-                        maxLines: 100000
-                )
-            }
             withCredentials([
-                    string(credentialsId: 'ALERT_MAIL', variable: 'SEND_TO')
+                string(credentialsId: 'ALERT_MAIL', variable: 'SEND_TO'),
+                string(credentialsId: 'n8n-trigger-url-ai-error', variable: 'N8N_URL')
             ]) {
-                emailext(
-                        to: "${SEND_TO}",
-                        subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}!",
-                        body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}. \n\n${env.AI_EXPLAIN}\n\nCheck console output at ${env.BUILD_URL} to view the results."
+                httpRequest( httpMode: 'POST',
+                    acceptType: 'APPLICATION_JSON',
+                    contentType: 'APPLICATION_JSON',
+                    authentication: 'n8n-trigger-ai-error',
+                    requestBody: """{
+                        "buildUrl": "${env.BUILD_URL}",
+                        "sendTo": "${SEND_TO}",
+                        "subject": "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}!",
+                        "model": "${env.OL_MODEL}"
+                    }""",
+                    url: "${N8N_URL}",
+                    wrapAsMultipart: false
                 )
             }
         }
