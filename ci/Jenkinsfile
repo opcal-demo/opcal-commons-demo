@@ -16,7 +16,6 @@ pipeline {
 
     environment {
         MAVEN_ARGS = "--batch-mode --errors --no-transfer-progress"
-        OL_MODEL = "ornith:35b-q8_0"
     }
 
     stages {
